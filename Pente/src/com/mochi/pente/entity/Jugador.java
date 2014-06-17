@@ -23,4 +23,12 @@ public class Jugador {
 	public boolean equals(Object o) {
 		return (o instanceof Jugador) && ((Jugador)o).getNombre().equals(this.getNombre());
 	}
+	
+	public boolean esRemoto() {
+		return false;
+	}
+	
+	public Jugada siguienteMovimiento() {
+		return new Jugada();
+	}
 }
