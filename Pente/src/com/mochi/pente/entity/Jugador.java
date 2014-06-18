@@ -1,10 +1,18 @@
 package com.mochi.pente.entity;
 
 public class Jugador {
+	private long id;
 	private String nombre;
 	private int ficha;
 	
 	public Jugador(){}
+	
+	public void setId(long valor) {
+		this.id = valor;
+	}
+	public long getId(){
+		return this.id;
+	}
 	
 	public void setNombre(String valor){
 		this.nombre = valor;
@@ -24,11 +32,8 @@ public class Jugador {
 		return (o instanceof Jugador) && ((Jugador)o).getNombre().equals(this.getNombre());
 	}
 	
-	public boolean esRemoto() {
-		return false;
-	}
-	
 	public Jugada siguienteMovimiento() {
+		// se debe coger la jugada de la pantalla
 		return new Jugada();
 	}
 }
