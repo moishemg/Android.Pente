@@ -1,6 +1,7 @@
 package com.mochi.pente.ia;
 
 import com.mochi.pente.entity.Jugada;
+import com.mochi.pente.entity.Partida;
 
 public abstract class Objetivo {
 	protected int peso = 0;
@@ -9,5 +10,5 @@ public abstract class Objetivo {
 		this.peso = peso;
 	}
 	
-	public abstract int evaluar(int[][] tablero,Jugada pos);
+	public abstract int evaluar(Partida partida,Jugada pos);
 }

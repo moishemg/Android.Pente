@@ -1,6 +1,7 @@
 package com.mochi.pente.ia;
 
 import com.mochi.pente.entity.Jugada;
+import com.mochi.pente.entity.Partida;
 
 
 public class Evaluador {
@@ -12,10 +13,10 @@ public class Evaluador {
 		this.inicializarEstrategia();
 	}
 	
-	public int evaluar(int[][] tablero,Jugada pos) {
+	public int evaluar(Partida partida,Jugada pos) {
 		int peso = 0;
 		for (int i=0;i<this.objetivos.length;i++) {
-			int newPeso = this.objetivos[i].evaluar(tablero, pos);
+			int newPeso = this.objetivos[i].evaluar(partida, pos);
 			if (newPeso>peso) peso = newPeso;
 		}
 		return peso;

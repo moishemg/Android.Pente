@@ -5,25 +5,20 @@ public class Jugador {
 	private String nombre;
 	private int ficha;
 	
-	public Jugador(){}
-	
-	public void setId(long valor) {
-		this.id = valor;
+	public Jugador(long id,String nombre,int ficha){
+		this.id = id;
+		this.ficha = ficha;
+		this.nombre = nombre;
 	}
+	
 	public long getId(){
 		return this.id;
 	}
 	
-	public void setNombre(String valor){
-		this.nombre = valor;
-	}
 	public String getNombre(){
 		return this.nombre;
 	}
 	
-	public void setFicha(int valor){
-		this.ficha = valor;
-	}
 	public int getFicha(){
 		return this.ficha;
 	}

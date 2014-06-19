@@ -43,19 +43,34 @@ public class Partida {
 		this.setFinGanador(false);
 		this.robadosJug1 = 0;
 		this.robadosJug2 = 0;
-		if (((Math.random() * 100) % 2)==0) {
+		if (((Math.ceil(Math.random() * 100)) % 2)==0) {
 			this.turno = this.jug1;
 		} else {
 			this.turno = this.jug2;
 		}
 	}
 	
-	public void siguienteTurno(){
+	public Jugador siguienteTurno(){
 		if (this.turno.equals(this.jug1)) {
 			this.turno = this.jug2;
 		} else {
-			this.turno = this.jug2;
+			this.turno = this.jug1;
 		}
+		return this.turno;
+	}
+	
+	public Jugador getTurno(){
+		return this.turno;
+	}
+	
+	public void comprobarJugada(Jugada jug){
+		this.establecerJugadorTablero(jug);
+		this.comprobarLineaDeFichas(this.FICHAS_IGUALES_LINEA,jug,true,true);
+		if (!this.fin) this.comprobarRobar2(jug);
+	}
+	
+	public ArrayList<Jugada> lineaFichas(){
+		return this.linea;
 	}
 	
 	private void setFinGanador(boolean valor) {
@@ -71,7 +86,7 @@ public class Partida {
 		return this.finGanador;
 	}
 	
-	public static boolean posicionDentroTablero(Jugada pos) {
+	private boolean posicionDentroTablero(Jugada pos) {
 		return (pos.fila>=0 && pos.fila<=Partida.MAX_FILAS && pos.columna>=0 && pos.columna<=Partida.MAX_COLUMNAS);
 	}
 	
@@ -79,28 +94,39 @@ public class Partida {
 		return (this.tablero[pos.fila][pos.columna]==this.turno.getFicha());
 	}
 	
+	private boolean posicionFichaContrario(Jugada pos) {
+		return (this.tablero[pos.fila][pos.columna]!=this.turno.getFicha() && this.tablero[pos.fila][pos.columna]!=Partida.VACIO);
+	}
+	
 	private void establecerJugadorTablero(Jugada pos) {
 		this.tablero[pos.fila][pos.columna]=this.turno.getFicha();
 	}
 	
-	public void comprobarJugada(Jugada jug){
-		this.establecerJugadorTablero(jug);
-		this.comprobar5Linea(jug);
-		if (!this.fin) this.comprobarRobar2(jug);
+	public void comprobarLineaDeFichasPropia(int numFichasLinea,Jugada jug) {
+		this.comprobarLineaDeFichas(numFichasLinea,jug,false,true);
 	}
 	
-	private void comprobar5Linea(Jugada jug) {
+	public void comprobarLineaDeFichasContrario(int numFichasLinea,Jugada jug) {
+		this.comprobarLineaDeFichas(numFichasLinea,jug,false,false);
+	}	
+	
+	public void comprobarLineaDeFichas(int numFichasLinea,Jugada jug,boolean comprobarFinPartida, boolean propia) {
 		int[][] movimientos = {{-1,-1},{-1,0},{-1,1},{0,-1}};
 		int iMovimiento = 0;
+		boolean fin = false;
 		while (!this.fin && iMovimiento<movimientos.length) {
-			this.comprobarLinea(jug,movimientos[iMovimiento][0],movimientos[iMovimiento][1]);
+			if (propia)
+				fin = (this.comprobarLineaPropia(jug,movimientos[iMovimiento][0],movimientos[iMovimiento][1])==numFichasLinea);
+			else
+				fin = (this.comprobarLineaContrario(jug,movimientos[iMovimiento][0],movimientos[iMovimiento][1])==numFichasLinea);
 			iMovimiento++;
 		}
+		if (comprobarFinPartida) this.setFinGanador(fin);
 	}
 	
-	private void comprobarLinea(Jugada jug,int mov_fila,int mov_columna){
+	private int comprobarLineaPropia(Jugada jug,int mov_fila,int mov_columna){
 		Jugada jugPos = new Jugada(jug.fila-mov_fila,jug.columna-mov_columna);
-		while (Partida.posicionDentroTablero(jugPos) && this.posicionFichaJugador(jugPos)) {
+		while (this.posicionDentroTablero(jugPos) && this.posicionFichaJugador(jugPos)) {
 			jugPos.fila-=mov_fila;
 			jugPos.columna-=mov_columna;
 		}
@@ -109,15 +135,36 @@ public class Partida {
 		
 		int numFichasIguales = 0;
 		this.linea = new ArrayList<Jugada>();
-		while (Partida.posicionDentroTablero(jugPos) && this.posicionFichaJugador(jugPos)) {
+		while (this.posicionDentroTablero(jugPos) && this.posicionFichaJugador(jugPos)) {
 			this.linea.add(new Jugada(jugPos.fila,jugPos.columna));
 			numFichasIguales++;
 			jugPos.fila+=mov_fila;
 			jugPos.columna+=mov_columna;
 		}
 		
-		this.setFinGanador(numFichasIguales==this.FICHAS_IGUALES_LINEA);
+		return numFichasIguales;
 	}
+	
+	private int comprobarLineaContrario(Jugada jug,int mov_fila,int mov_columna){
+		Jugada jugPos = new Jugada(jug.fila-mov_fila,jug.columna-mov_columna);
+		while (this.posicionDentroTablero(jugPos) && this.posicionFichaContrario(jugPos)) {
+			jugPos.fila-=mov_fila;
+			jugPos.columna-=mov_columna;
+		}
+		jugPos.fila+=mov_fila;
+		jugPos.columna+=mov_columna;
+		
+		int numFichasIguales = 0;
+		this.linea = new ArrayList<Jugada>();
+		while (this.posicionDentroTablero(jugPos) && this.posicionFichaContrario(jugPos)) {
+			this.linea.add(new Jugada(jugPos.fila,jugPos.columna));
+			numFichasIguales++;
+			jugPos.fila+=mov_fila;
+			jugPos.columna+=mov_columna;
+		}
+		
+		return numFichasIguales;
+	}	
 	
 	private void comprobarRobar2(Jugada jug){
 		boolean robar = false;
@@ -135,13 +182,13 @@ public class Partida {
 		this.linea = new ArrayList<Jugada>();
 		this.linea.add(new Jugada(jug.fila,jug.columna));
 		Jugada jugPos = new Jugada(jug.fila+mov_fila,jug.columna+mov_columna);
-		if (Partida.posicionDentroTablero(jugPos) && !this.posicionFichaJugador(jugPos)) {
+		if (this.posicionDentroTablero(jugPos) && this.posicionFichaContrario(jugPos)) {
 			this.linea.add(jugPos);
 			jugPos = new Jugada(jugPos.fila+mov_fila,jugPos.columna+mov_columna);
-			if (Partida.posicionDentroTablero(jugPos) && !this.posicionFichaJugador(jugPos)) {
+			if (this.posicionDentroTablero(jugPos) && this.posicionFichaContrario(jugPos)) {
 				this.linea.add(jugPos);
 				jugPos = new Jugada(jugPos.fila+mov_fila,jugPos.columna+mov_columna);
-				if (Partida.posicionDentroTablero(jugPos) && this.posicionFichaJugador(jugPos)) {
+				if (this.posicionDentroTablero(jugPos) && this.posicionFichaJugador(jugPos)) {
 					this.linea.add(jugPos);
 					robar = true;
 				} // if propia ficha
@@ -160,5 +207,9 @@ public class Partida {
 			this.robadosJug2++;
 			this.setFinGanador(this.robadosJug2==this.PAREJAS_ROBADAS);
 		}
+	}
+	
+	public boolean posicionLibreTablero(Jugada pos) {
+		return this.posicionDentroTablero(pos) && this.tablero[pos.fila][pos.columna]==Partida.VACIO;
 	}
 }

@@ -1,6 +1,7 @@
 package com.mochi.pente.ia;
 
 import com.mochi.pente.entity.Jugada;
+import com.mochi.pente.entity.Partida;
 
 public class Robar2Piezas extends Objetivo {
 
@@ -9,7 +10,7 @@ public class Robar2Piezas extends Objetivo {
 	}
 
 	@Override
-	public int evaluar(int[][] tablero, Jugada pos) {
+	public int evaluar(Partida partida, Jugada pos) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

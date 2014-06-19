@@ -1,5 +1,10 @@
 package com.mochi.pente;
 
+import com.mochi.pente.entity.Jugada;
+import com.mochi.pente.entity.Jugador;
+import com.mochi.pente.entity.JugadorCPU;
+import com.mochi.pente.entity.Partida;
+
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -21,6 +26,27 @@ public class MainActivity extends ActionBarActivity {
 		if (savedInstanceState == null) {
 			getSupportFragmentManager().beginTransaction().add(R.id.container, new PlaceholderFragment()).commit();
 		}
+		
+		Jugador jug1 = new Jugador(1,"Jugador 1",Partida.FICHA_ROJO);
+		Jugador jug2 = new JugadorCPU(2,"Jugador 2",Partida.FICHA_AMARILLO);
+		
+		Partida partida = new Partida(jug1,jug2);
+		Jugador jugador = partida.getTurno();
+		
+		partida.comprobarJugada(new Jugada(1,1));
+		partida.comprobarJugada(new Jugada(1,2));
+		partida.comprobarJugada(new Jugada(1,3));
+		partida.comprobarJugada(new Jugada(1,4));
+		
+		Jugada jug = ((JugadorCPU)jug2).siguienteMovimiento(partida);
+		partida.comprobarJugada(jug);
+		
+		jugador = partida.siguienteTurno();
+		partida.comprobarJugada(new Jugada(2,1));
+		partida.comprobarJugada(new Jugada(2,2));
+		partida.comprobarJugada(new Jugada(2,3));
+		
+		
 	}
 
 	@Override

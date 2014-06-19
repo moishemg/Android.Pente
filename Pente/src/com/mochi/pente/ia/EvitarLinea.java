@@ -1,6 +1,7 @@
 package com.mochi.pente.ia;
 
 import com.mochi.pente.entity.Jugada;
+import com.mochi.pente.entity.Partida;
 
 public class EvitarLinea extends Objetivo {
 	protected int numLinea;
@@ -12,9 +13,11 @@ public class EvitarLinea extends Objetivo {
 	}
 
 	@Override
-	public int evaluar(int[][] tablero, Jugada pos) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int evaluar(Partida partida, Jugada pos) {
+		// debemos buscar una linea de fichas de longitud numLinea
+		partida.comprobarLineaDeFichasPropia(this.numLinea, pos);
+		
+		return (partida.lineaFichas().size()==this.numLinea?this.peso:0);
 	}
 
 }
