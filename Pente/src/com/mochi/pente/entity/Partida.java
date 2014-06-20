@@ -30,10 +30,9 @@ public class Partida {
 	public Partida(Jugador jug1,Jugador jug2){
 		this.jug1 = jug1;
 		this.jug2 = jug2;
-		this.iniciar();
 	}
 	
-	private void iniciar(){
+	public Jugador iniciar(){
 		this.tablero = new int[Partida.MAX_FILAS][Partida.MAX_COLUMNAS];
 		for (int iFila=0;iFila<Partida.MAX_FILAS;iFila++) {
 			for (int iCol=0;iCol<Partida.MAX_COLUMNAS;iCol++) {
@@ -48,6 +47,11 @@ public class Partida {
 		} else {
 			this.turno = this.jug2;
 		}
+		
+		// el primer movimiento es en el centro del tablero
+		this.primerMovimiento();
+		
+		return this.siguienteTurno();
 	}
 	
 	public Jugador siguienteTurno(){
@@ -59,18 +63,33 @@ public class Partida {
 		return this.turno;
 	}
 	
+	public void rendirse() {
+		this.fin = true;
+	}
+	
 	public Jugador getTurno(){
 		return this.turno;
 	}
 	
 	public void comprobarJugada(Jugada jug){
 		this.establecerJugadorTablero(jug);
+		
+		// comprobar si ha conseguido 5 en línea
 		this.comprobarLineaDeFichas(this.FICHAS_IGUALES_LINEA,jug,true,true);
+
+		// sino comprobar si ha robado pareja de fichas
 		if (!this.fin) this.comprobarRobar2(jug);
 	}
 	
 	public ArrayList<Jugada> lineaFichas(){
 		return this.linea;
+	}
+	
+	private void primerMovimiento(){
+		// el primer movimiento es en el centro del tablero
+		int iFila = (int) Math.ceil(Partida.MAX_FILAS/2);
+		int iCol = (int) Math.ceil(Partida.MAX_COLUMNAS/2);
+		this.establecerJugadorTablero(new Jugada(iFila,iCol));
 	}
 	
 	private void setFinGanador(boolean valor) {
@@ -114,7 +133,7 @@ public class Partida {
 		int[][] movimientos = {{-1,-1},{-1,0},{-1,1},{0,-1}};
 		int iMovimiento = 0;
 		boolean fin = false;
-		while (!this.fin && iMovimiento<movimientos.length) {
+		while (!fin && iMovimiento<movimientos.length) {
 			if (propia)
 				fin = (this.comprobarLineaPropia(jug,movimientos[iMovimiento][0],movimientos[iMovimiento][1])==numFichasLinea);
 			else
@@ -211,5 +230,25 @@ public class Partida {
 	
 	public boolean posicionLibreTablero(Jugada pos) {
 		return this.posicionDentroTablero(pos) && this.tablero[pos.fila][pos.columna]==Partida.VACIO;
+	}
+	
+	public String toString(){
+		String cadena = "Jugador 1: " + this.jug1.toString()+"\n"+"Jugador 2: "+this.jug2.toString()+"\n";
+		for (int iFila=0;iFila<Partida.MAX_FILAS;iFila++) {
+			cadena += "---";
+		}
+		for (int iFila=0;iFila<Partida.MAX_FILAS;iFila++) {
+			cadena += "\n";
+			for (int iCol=0;iCol<Partida.MAX_COLUMNAS;iCol++) {
+				cadena += " "+this.tablero[iFila][iCol]+" ";
+			}
+		}
+		cadena += "\n";
+		for (int iFila=0;iFila<Partida.MAX_FILAS;iFila++) {
+			cadena += "---";
+		}
+		cadena += "\n";
+		
+		return cadena;
 	}
 }

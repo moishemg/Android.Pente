@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.os.Build;
 
 public class MainActivity extends ActionBarActivity {
@@ -26,26 +27,6 @@ public class MainActivity extends ActionBarActivity {
 		if (savedInstanceState == null) {
 			getSupportFragmentManager().beginTransaction().add(R.id.container, new PlaceholderFragment()).commit();
 		}
-		
-		Jugador jug1 = new Jugador(1,"Jugador 1",Partida.FICHA_ROJO);
-		Jugador jug2 = new JugadorCPU(2,"Jugador 2",Partida.FICHA_AMARILLO);
-		
-		Partida partida = new Partida(jug1,jug2);
-		Jugador jugador = partida.getTurno();
-		
-		partida.comprobarJugada(new Jugada(1,1));
-		partida.comprobarJugada(new Jugada(1,2));
-		partida.comprobarJugada(new Jugada(1,3));
-		partida.comprobarJugada(new Jugada(1,4));
-		
-		Jugada jug = ((JugadorCPU)jug2).siguienteMovimiento(partida);
-		partida.comprobarJugada(jug);
-		
-		jugador = partida.siguienteTurno();
-		partida.comprobarJugada(new Jugada(2,1));
-		partida.comprobarJugada(new Jugada(2,2));
-		partida.comprobarJugada(new Jugada(2,3));
-		
 		
 	}
 
@@ -73,15 +54,64 @@ public class MainActivity extends ActionBarActivity {
 	 * A placeholder fragment containing a simple view.
 	 */
 	public static class PlaceholderFragment extends Fragment {
-
-		public PlaceholderFragment() {
+		
+		public PlaceholderFragment() { }
+		
+		@Override
+		public void onViewCreated(View view, Bundle savedInstanceState) {
+		    super.onViewCreated(view, savedInstanceState);
+		    this.test();
 		}
 
 		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_main, container,	false);
 			return rootView;
+		}
+		
+		private void test(){
+			Jugador jug1 = new JugadorCPU(1,"Jugador 1",Partida.FICHA_ROJO);
+			Jugador jug2 = new JugadorCPU(2,"Jugador 2",Partida.FICHA_AMARILLO);
+			
+			Partida partida = new Partida(jug1,jug2);
+			TextView txt = (TextView)this.getView().findViewById(R.id.txtText);
+			
+			Jugador jugador = partida.iniciar();
+			while (!partida.esFinPartida()) {
+				Jugada jug = ((JugadorCPU)jugador).siguienteMovimiento(partida);
+				if (jug.valida()) {
+					partida.comprobarJugada(jug);
+					
+					jugador = partida.siguienteTurno();
+				} else {
+					partida.rendirse();
+				}
+				
+			}
+			
+			txt.setText("Fin de Partida\n"+partida.toString());
+			if (partida.esFinPartidaGanadora()) {
+				txt.setText(txt.getText()+"\nEl ganador es: "+partida.getTurno());
+			}
+			
+			/*Jugador jugador = partida.getTurno();
+			
+			partida.comprobarJugada(new Jugada(1,1));
+			partida.comprobarJugada(new Jugada(1,3));
+			partida.comprobarJugada(new Jugada(1,4));
+			
+			Jugada jug = ((JugadorCPU)jug2).siguienteMovimiento(partida);
+			partida.comprobarJugada(jug);
+			
+			jugador = partida.siguienteTurno();
+			partida.comprobarJugada(new Jugada(2,1));
+			partida.comprobarJugada(new Jugada(2,2));
+			partida.comprobarJugada(new Jugada(2,3));
+			
+			String tab = partida.toString();*/
+			
+			
+			
 		}
 	}
 

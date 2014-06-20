@@ -11,6 +11,31 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:text="@string/hello_world"
+        android:id="@+id/txtText"/>
+    
+    <com.mochi.pente.Ficha
+        android:id="@+id/ficha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtText" />
 
+	<com.mochi.pente.Ficha 
+        android:id="@+id/ficha2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtText" 
+        android:layout_toRightOf="@id/ficha" />
+	<com.mochi.pente.Ficha 
+        android:id="@+id/ficha3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtText" 
+		android:layout_toRightOf="@id/ficha2" />
+	<com.mochi.pente.Ficha 
+        android:id="@+id/ficha4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtText" 
+		android:layout_toRightOf="@id/ficha3" />
 </RelativeLayout>

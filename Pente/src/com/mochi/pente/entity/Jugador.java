@@ -31,4 +31,9 @@ public class Jugador {
 		// se debe coger la jugada de la pantalla
 		return new Jugada();
 	}
+	
+	public String toString() {
+		return this.getNombre();
+	}
+	
 }
