@@ -20,4 +20,8 @@ public class Jugada {
 	public boolean equals(Object o){
 		return ((o instanceof Jugada) && ((Jugada)o).fila==this.fila && ((Jugada)o).columna==this.columna);
 	}
+	
+	public String toString(){
+		return "["+this.fila+"-"+this.columna+"]";
+	}
 }

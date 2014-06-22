@@ -17,7 +17,7 @@ public class EvitarLinea extends Objetivo {
 		// debemos buscar una linea de fichas de longitud numLinea
 		partida.comprobarLineaDeFichasContrario(this.numLinea, pos);
 		
-		return (partida.lineaFichas().size()==this.numLinea?this.peso:0);
+		return (partida.getLineaFichas().size()==this.numLinea?this.peso:0);
 	}
 
 }

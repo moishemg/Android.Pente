@@ -235,20 +235,14 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
         public static final int buttonBarStyle=0x7f010017;
-        /** <p>Must be one of the following constant values.</p>
-<table>
-<colgroup align="left" />
-<colgroup align="left" />
-<colgroup align="left" />
-<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-<tr><td><code>vacio</code></td><td>0</td><td></td></tr>
-<tr><td><code>rojo</code></td><td>1</td><td></td></tr>
-<tr><td><code>amarillo</code></td><td>2</td><td></td></tr>
-<tr><td><code>azul</code></td><td>3</td><td></td></tr>
-<tr><td><code>verde</code></td><td>4</td><td></td></tr>
-</table>
+        /** <p>Must be an integer value, such as "<code>100</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
          */
-        public static final int color=0x7f010070;
+        public static final int columnas=0x7f01006f;
         /**  Specifies a layout for custom navigation. Overrides navigationMode. 
          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
@@ -332,6 +326,14 @@ containing a value of this type.
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
         public static final int expandActivityOverflowButtonDrawable=0x7f01006b;
+        /** <p>Must be an integer value, such as "<code>100</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int filas=0x7f01006e;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -484,22 +486,6 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 </table>
          */
         public static final int navigationMode=0x7f010027;
-        /** <p>Must be an integer value, such as "<code>100</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-         */
-        public static final int numColumnas=0x7f01006f;
-        /** <p>Must be an integer value, such as "<code>100</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-         */
-        public static final int numFilas=0x7f01006e;
         /**  Sets the padding, in pixels, of the end edge; see {@link android.R.attr#padding}. 
          <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
@@ -766,6 +752,20 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 "<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
          */
         public static final int textColorSearchUrl=0x7f010068;
+        /** <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>vacia</code></td><td>0</td><td></td></tr>
+<tr><td><code>roja</code></td><td>1</td><td></td></tr>
+<tr><td><code>amarilla</code></td><td>2</td><td></td></tr>
+<tr><td><code>azul</code></td><td>3</td><td></td></tr>
+<tr><td><code>verde</code></td><td>4</td><td></td></tr>
+</table>
+         */
+        public static final int tipo=0x7f010070;
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -1121,10 +1121,10 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f050016;
         public static final int action_menu_presenter=0x7f050017;
         public static final int action_mode_close_button=0x7f050029;
-        public static final int action_settings=0x7f050047;
+        public static final int action_settings=0x7f050044;
         public static final int activity_chooser_view_content=0x7f05002a;
         public static final int always=0x7f05000b;
-        public static final int amarillo=0x7f05001c;
+        public static final int amarilla=0x7f05001c;
         public static final int azul=0x7f05001d;
         public static final int beginning=0x7f050011;
         public static final int checkbox=0x7f050032;
@@ -1138,10 +1138,6 @@ containing a value of this type.
         public static final int end=0x7f050013;
         public static final int expand_activities_button=0x7f05002b;
         public static final int expanded_menu=0x7f050031;
-        public static final int ficha=0x7f050043;
-        public static final int ficha2=0x7f050044;
-        public static final int ficha3=0x7f050045;
-        public static final int ficha4=0x7f050046;
         public static final int home=0x7f050014;
         public static final int homeAsUp=0x7f050005;
         public static final int icon=0x7f05002f;
@@ -1156,7 +1152,7 @@ containing a value of this type.
         public static final int progress_circular=0x7f050018;
         public static final int progress_horizontal=0x7f050019;
         public static final int radio=0x7f050034;
-        public static final int rojo=0x7f05001b;
+        public static final int roja=0x7f05001b;
         public static final int search_badge=0x7f050037;
         public static final int search_bar=0x7f050036;
         public static final int search_button=0x7f050038;
@@ -1174,12 +1170,13 @@ containing a value of this type.
         public static final int split_action_bar=0x7f050023;
         public static final int submit_area=0x7f05003e;
         public static final int tabMode=0x7f050002;
+        public static final int tablero=0x7f050043;
         public static final int title=0x7f050030;
         public static final int top_action_bar=0x7f050025;
         public static final int txtText=0x7f050042;
         public static final int up=0x7f050026;
         public static final int useLogo=0x7f050003;
-        public static final int vacio=0x7f05001a;
+        public static final int vacia=0x7f05001a;
         public static final int verde=0x7f05001e;
         public static final int withText=0x7f05000c;
     }
@@ -2235,15 +2232,15 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #Ficha_color com.mochi.pente:color}</code></td><td></td></tr>
+           <tr><td><code>{@link #Ficha_tipo com.mochi.pente:tipo}</code></td><td></td></tr>
            </table>
-           @see #Ficha_color
+           @see #Ficha_tipo
          */
         public static final int[] Ficha = {
             0x7f010070
         };
         /**
-          <p>This symbol is the offset where the {@link com.mochi.pente.R.attr#color}
+          <p>This symbol is the offset where the {@link com.mochi.pente.R.attr#tipo}
           attribute's value can be found in the {@link #Ficha} array.
 
 
@@ -2253,15 +2250,15 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 <colgroup align="left" />
 <colgroup align="left" />
 <tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-<tr><td><code>vacio</code></td><td>0</td><td></td></tr>
-<tr><td><code>rojo</code></td><td>1</td><td></td></tr>
-<tr><td><code>amarillo</code></td><td>2</td><td></td></tr>
+<tr><td><code>vacia</code></td><td>0</td><td></td></tr>
+<tr><td><code>roja</code></td><td>1</td><td></td></tr>
+<tr><td><code>amarilla</code></td><td>2</td><td></td></tr>
 <tr><td><code>azul</code></td><td>3</td><td></td></tr>
 <tr><td><code>verde</code></td><td>4</td><td></td></tr>
 </table>
-          @attr name com.mochi.pente:color
+          @attr name com.mochi.pente:tipo
         */
-        public static final int Ficha_color = 0;
+        public static final int Ficha_tipo = 0;
         /** Attributes that can be used with a LinearLayoutICS.
            <p>Includes the following attributes:</p>
            <table>
@@ -3012,17 +3009,17 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #Tablero_numColumnas com.mochi.pente:numColumnas}</code></td><td></td></tr>
-           <tr><td><code>{@link #Tablero_numFilas com.mochi.pente:numFilas}</code></td><td></td></tr>
+           <tr><td><code>{@link #Tablero_columnas com.mochi.pente:columnas}</code></td><td></td></tr>
+           <tr><td><code>{@link #Tablero_filas com.mochi.pente:filas}</code></td><td></td></tr>
            </table>
-           @see #Tablero_numColumnas
-           @see #Tablero_numFilas
+           @see #Tablero_columnas
+           @see #Tablero_filas
          */
         public static final int[] Tablero = {
             0x7f01006e, 0x7f01006f
         };
         /**
-          <p>This symbol is the offset where the {@link com.mochi.pente.R.attr#numColumnas}
+          <p>This symbol is the offset where the {@link com.mochi.pente.R.attr#columnas}
           attribute's value can be found in the {@link #Tablero} array.
 
 
@@ -3032,11 +3029,11 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name com.mochi.pente:numColumnas
+          @attr name com.mochi.pente:columnas
         */
-        public static final int Tablero_numColumnas = 1;
+        public static final int Tablero_columnas = 1;
         /**
-          <p>This symbol is the offset where the {@link com.mochi.pente.R.attr#numFilas}
+          <p>This symbol is the offset where the {@link com.mochi.pente.R.attr#filas}
           attribute's value can be found in the {@link #Tablero} array.
 
 
@@ -3046,9 +3043,9 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name com.mochi.pente:numFilas
+          @attr name com.mochi.pente:filas
         */
-        public static final int Tablero_numFilas = 0;
+        public static final int Tablero_filas = 0;
         /**  These are the standard attributes that make up a complete theme. 
            <p>Includes the following attributes:</p>
            <table>

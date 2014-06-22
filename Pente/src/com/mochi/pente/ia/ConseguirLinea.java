@@ -17,7 +17,7 @@ public class ConseguirLinea extends Objetivo {
 		// debemos buscar una linea de fichas de longitud numLinea
 		partida.comprobarLineaDeFichasPropia(this.numLinea, pos);
 		
-		return (partida.lineaFichas().size()==this.numLinea?this.peso:0);
+		return (partida.getLineaFichas().size()==this.numLinea?this.peso:0);
 	}
 
 }

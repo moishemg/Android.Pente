@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="Tablero">
+        <attr name="filas" format="integer"/>
+        <attr name="columnas" format="integer"/>
+    </declare-styleable>
+    <declare-styleable name="Ficha">
+        <attr name="tipo" format="enum" >
+            <enum name="vacia" value="0" />
+            <enum name="roja" value="1" />
+            <enum name="amarilla" value="2" />
+            <enum name="azul" value="3" />
+            <enum name="verde" value="4" />
+        </attr>
+    </declare-styleable>
+</resources>

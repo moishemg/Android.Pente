@@ -81,10 +81,6 @@ public class Partida {
 		if (!this.fin) this.comprobarRobar2(jug);
 	}
 	
-	public ArrayList<Jugada> lineaFichas(){
-		return this.linea;
-	}
-	
 	private void primerMovimiento(){
 		// el primer movimiento es en el centro del tablero
 		int iFila = (int) Math.ceil(Partida.MAX_FILAS/2);
@@ -129,7 +125,7 @@ public class Partida {
 		this.comprobarLineaDeFichas(numFichasLinea,jug,false,false);
 	}	
 	
-	public void comprobarLineaDeFichas(int numFichasLinea,Jugada jug,boolean comprobarFinPartida, boolean propia) {
+	private void comprobarLineaDeFichas(int numFichasLinea,Jugada jug,boolean comprobarFinPartida, boolean propia) {
 		int[][] movimientos = {{-1,-1},{-1,0},{-1,1},{0,-1}};
 		int iMovimiento = 0;
 		boolean fin = false;
@@ -226,6 +222,31 @@ public class Partida {
 			this.robadosJug2++;
 			this.setFinGanador(this.robadosJug2==this.PAREJAS_ROBADAS);
 		}
+	}
+	
+	public int getNumParejasRobadas(Jugador jug){
+		int num = 0;
+		if (this.turno.equals(jug)) num = this.robadosJug1;
+		else num = this.robadosJug2;
+		return num;
+	}
+
+	public ArrayList<Jugada> getLineaFichas() {
+		return this.linea;
+	}
+	
+	public ArrayList<Jugada> getLineaGanadora() {
+		ArrayList<Jugada> lst = this.getLineaFichas();
+		return (lst!=null && lst.size()==this.FICHAS_IGUALES_LINEA?lst:null);
+	}
+	
+	public ArrayList<Jugada> getParejaRobada(){
+		ArrayList<Jugada> pareja = new ArrayList<Jugada>();
+		if (this.linea.size()==4) {
+			pareja.add(new Jugada(this.linea.get(1).fila,this.linea.get(1).columna));
+			pareja.add(new Jugada(this.linea.get(2).fila,this.linea.get(2).columna));
+		}
+		return pareja;
 	}
 	
 	public boolean posicionLibreTablero(Jugada pos) {
