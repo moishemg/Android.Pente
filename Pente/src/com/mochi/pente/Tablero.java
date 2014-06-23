@@ -24,6 +24,7 @@ public class Tablero extends View implements OnTableroEventListener {
 	private int pasoVer;
 	
 	private ArrayList<FichaPosicion> fichas;
+	private ArrayList<Jugada> marcas;
 	
 	public Tablero(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -67,28 +68,79 @@ public class Tablero extends View implements OnTableroEventListener {
 		this.drawFichas(canvas);
 	}
 	
+	private int ult=0;
 	private void drawFichas(Canvas canvas) {
 		if (this.fichas!=null && this.fichas.size()>0) {
 			Paint pincel = new Paint();
 			pincel.setStyle(Style.FILL_AND_STROKE);
+			
+			Paint border = new Paint();
+			border.setStyle(Style.STROKE);
+			border.setStrokeWidth(3);
+			
+			Paint centro = new Paint();
+			centro.setStyle(Style.FILL);
+			centro.setStrokeWidth(3);
+			
 			for (FichaPosicion ficha : this.fichas) {
 				switch (ficha.color) {
-					case 1: pincel.setARGB(255, 255, 0, 0); break;
-					case 2: pincel.setARGB(255, 255, 255, 0); break;
-					case 3: pincel.setARGB(255, 0, 255, 0); break;
-					case 4: pincel.setARGB(255, 0, 0, 255); break;
-					case 10: pincel.setARGB(255, 255, 0, 153); break; // especial ganador
-					default: pincel.setARGB(0, 255, 255, 255); break;
+					case 1: pincel.setARGB(200, 255, 0, 0); 
+							centro.setARGB(255, 255, 0, 0);
+							border.setARGB(128, 255, 0, 0);
+							break;
+					case 2: pincel.setARGB(200, 255, 255, 0);
+							centro.setARGB(255, 255, 255, 0); 
+							border.setARGB(128, 255, 255, 0);
+							break;
+					case 3: pincel.setARGB(200, 0, 255, 0); 
+							centro.setARGB(255, 0, 255, 0);
+							border.setARGB(128, 0, 255, 0); 
+							break;
+					case 4: pincel.setARGB(200, 0, 0, 255); 
+							centro.setARGB(255, 0, 0, 255); 
+							border.setARGB(200, 0, 0, 255); 
+							break;
+					case 10: pincel.setARGB(200, 255, 0, 153); 
+							 centro.setARGB(255, 255, 0, 153); 
+							 border.setARGB(128, 255, 0, 153); 
+							 break; // especial ganador
+					default: pincel.setARGB(0, 255, 255, 255); 
+					         centro.setARGB(0, 255, 255, 255); 
+							 border.setARGB(0, 255, 255, 255); 
+							 break;
 				}
 				
 				canvas.drawCircle(((ficha.fila+1)*this.pasoHor), ((ficha.columna+1)*this.pasoVer), this.pasoVer/2, pincel);
+				//canvas.drawCircle(((ficha.fila+1)*this.pasoHor), ((ficha.columna+1)*this.pasoVer), this.pasoVer/2, border);
+				canvas.drawCircle(((ficha.fila+1)*this.pasoHor), ((ficha.columna+1)*this.pasoVer), this.pasoVer/4, centro);
+			}
+			
+			if (this.marcas!=null && this.marcas.size()>0) {
+				pincel.setARGB(255, 255, 0, 153);
+				pincel.setStyle(Style.STROKE);
+				pincel.setStrokeWidth(6);
+				/*
+				for (Jugada pos : this.marcas) {
+					canvas.drawCircle(((pos.fila+1)*this.pasoHor), ((pos.columna+1)*this.pasoVer), (this.pasoVer/2)+1, pincel);
+				}
+				*/
+				
+				canvas.drawLine((this.marcas.get(0).fila+1)*this.pasoHor, (this.marcas.get(0).columna+1)*this.pasoVer, (this.marcas.get(ult).fila+1)*this.pasoHor, (this.marcas.get(ult).columna+1)*this.pasoVer, pincel);
+				
+				pincel.setARGB(255, 255, 0, 204);
+				pincel.setStrokeWidth(2);
+				canvas.drawLine((this.marcas.get(0).fila+1)*this.pasoHor, (this.marcas.get(0).columna+1)*this.pasoVer, (this.marcas.get(ult).fila+1)*this.pasoHor, (this.marcas.get(ult).columna+1)*this.pasoVer, pincel);
+				this.ult+=1;
+				
+				if (this.ult<this.marcas.size()) this.postInvalidateDelayed(20);
 			}
 			
 		}
 	}
 	
 	public void marcarFichas(ArrayList<Jugada> posiciones) {
-		if (this.fichas!=null) {			
+		this.marcas = posiciones;
+		/*if (this.fichas!=null) {			
 			for (Jugada jug : posiciones) {
 				boolean encontrado = false;
 				int i =0;
@@ -104,7 +156,9 @@ public class Tablero extends View implements OnTableroEventListener {
 			
 			this.invalidate();
 			this.requestLayout();
-		}
+		}*/
+		this.invalidate();
+		this.requestLayout();
 	}
 	
 	public void eliminarFichas(ArrayList<Jugada> posiciones) {
@@ -148,7 +202,10 @@ public class Tablero extends View implements OnTableroEventListener {
 		if (x>this.filas) x=this.filas-1;
 		if (y>this.columnas) y=this.columnas-1;
 		
-		if (this.onEventListener!=null) onEventListener.onEvent(new FichaPosicion(x,y,0));
+		if (this.onEventListener!=null) {
+			FichaPosicion ficha = new FichaPosicion(x,y,0);
+			if (this.fichas!=null && !this.fichas.contains(ficha) || this.fichas==null) onEventListener.onEvent(ficha);
+		}
 	    return super.onTouchEvent(event);
 	}
 	
