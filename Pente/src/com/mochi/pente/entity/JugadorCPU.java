@@ -42,6 +42,7 @@ public class JugadorCPU extends Jugador {
 					while (i<Partida.movimientosVecinos.length) {
 						Jugada newPos = new Jugada(iFila+Partida.movimientosVecinos[i][0],iCol+Partida.movimientosVecinos[i][1]);
 						if (partida.posicionLibreTablero(new Jugada(newPos.fila,newPos.columna)) && !huecos.contains(newPos)) {
+							// lo metemos en huecos para no volver a comprobarlo
 							huecos.add(newPos);
 							int newPeso = eval.evaluar(partida, newPos);
 							if (newPeso>peso) {

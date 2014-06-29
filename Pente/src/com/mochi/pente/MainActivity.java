@@ -1,5 +1,7 @@
 package com.mochi.pente;
 
+import java.util.ArrayList;
+
 import com.mochi.pente.entity.FichaPosicion;
 import com.mochi.pente.entity.Jugada;
 import com.mochi.pente.entity.Jugador;
@@ -9,12 +11,21 @@ import com.mochi.pente.events.OnTableroEventListener;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,120 +61,72 @@ public class MainActivity extends ActionBarActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	public static void mensaje(Context context,String msj,boolean parar,boolean error, int drawable){
+		if (!parar) {
+			Toast.makeText(context, msj, Toast.LENGTH_SHORT).show();
+		} else {
+			Builder alert = new AlertDialog.Builder(context);
+			if (error) 	alert.setTitle("ERROR");
+			else alert.setTitle("Información");
+			
+			if (drawable>0) alert.setIcon(drawable);
+			
+			alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {  
+			      public void onClick(final DialogInterface dialog, final int which) {  
+			        return;  
+			    } });
+			alert.setMessage(msj);
+			alert.create().show();
+		} // if
+	} // mensaje
 
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
 	public static class PlaceholderFragment extends Fragment {
-		private TextView txt;
-		private Tablero tablero;
-		private Partida partida;
-		
+		private Activity activity;
 		public PlaceholderFragment() { }
 		
 		@Override
 		public void onViewCreated(View view, Bundle savedInstanceState) {
 		    super.onViewCreated(view, savedInstanceState);
-		    this.tablero = (Tablero)this.getView().findViewById(R.id.tablero);
-		    this.txt = (TextView)this.getView().findViewById(R.id.txtText);
-		    this.tablero.setTableroEventListener(new OnTableroEventListener() {
+		    
+		    this.activity = this.getActivity();
+		    
+		    ((Button)this.getActivity().findViewById(R.id.btnHumanVsHuman1)).setOnClickListener(this.btnButton());
+		    ((Button)this.getActivity().findViewById(R.id.btnHumanVsHuman2)).setOnClickListener(this.btnButton());
+		    ((Button)this.getActivity().findViewById(R.id.btnHumanVsCPU)).setOnClickListener(this.btnButton());
+		}
+		
+		private OnClickListener btnButton(){
+			OnClickListener handler = new OnClickListener() {
 				@Override
-				public void onEvent(FichaPosicion ficha) {
-					txt.setText(partida.getTurno().getNombre()+": "+ficha.fila+"-"+ficha.columna);
-					ficha.color=partida.getTurno().getFicha();
-					tablero.drawFicha(ficha);
-					enJuego(new Jugada(ficha.fila,ficha.columna));
+				public void onClick(View arg) {
+					Intent intent = new Intent(activity,Juego.class);
+					
+					intent.putExtra("jug1", 1);
+					
+					if (arg.getTag().equals("humanVsHuman2___")) {
+						intent.putExtra("jugRemoto", 1);
+					} else if (arg.getTag().equals("humanVsCPU")) {
+						intent.putExtra("jugCPU", 1);	
+					} else {
+						intent.putExtra("jug2",1);
+					}
+					
+					activity.startActivity(intent);
 				}
-		    });
-		    
-		    
-		    this.partida = new Partida(new Jugador(1,"Jugador 1",Partida.FICHA_ROJO),new Jugador(2,"Jugador 2",Partida.FICHA_VERDE));
-		    this.partida.iniciar();
-		    this.txt.setText("Turno : " + partida.getTurno().getNombre());
-		    
-		    //this.test();
+			
+			};
+			return handler;
 		}
 		
-		private void enJuego(Jugada jug){
-			if (jug.valida()) {
-				this.partida.comprobarJugada(jug);
-				if (this.partida.getParejaRobada().size()>0) {
-					this.tablero.eliminarFichas(this.partida.getParejaRobada());
-				} 
-				if (!partida.esFinPartida()) {
-					this.partida.siguienteTurno();
-					this.txt.setText("Turno : " + partida.getTurno().getNombre());
-				}
-			} else {
-				this.partida.rendirse();
-			}
-			
-			if (this.partida.esFinPartida()) this.finDePartida();
-		}
-		
-		private void finDePartida(){
-			if (this.partida.esFinPartidaGanadora()) {
-				if (this.partida.getLineaGanadora()!=null) {
-					this.tablero.marcarFichas(this.partida.getLineaGanadora());
-				}
-				this.txt.setText("Ganador : " + this.partida.getTurno().getNombre());
-			} else {
-				this.txt.setText("Fin de partida");
-			}
-			
-			this.tablero.setTableroEventListener(null);
-		}
-
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_main, container,	false);
 			
 			return rootView;
-		}
-		
-		private void test(){
-			Jugador jug1 = new JugadorCPU(1,"Jugador 1",Partida.FICHA_ROJO);
-			Jugador jug2 = new JugadorCPU(2,"Jugador 2",Partida.FICHA_AMARILLO);
-			
-			Partida partida = new Partida(jug1,jug2);
-			TextView txt = (TextView)this.getView().findViewById(R.id.txtText);
-			
-			Jugador jugador = partida.iniciar();
-			while (!partida.esFinPartida()) {
-				Jugada jug = ((JugadorCPU)jugador).siguienteMovimiento(partida);
-				if (jug.valida()) {
-					partida.comprobarJugada(jug);
-					
-					jugador = partida.siguienteTurno();
-				} else {
-					partida.rendirse();
-				}
-				
-			}
-			
-			txt.setText("Fin de Partida\n"+partida.toString());
-			if (partida.esFinPartidaGanadora()) {
-				txt.setText(txt.getText()+"\nEl ganador es: "+partida.getTurno());
-			}
-			
-			/*Jugador jugador = partida.getTurno();
-			
-			partida.comprobarJugada(new Jugada(1,1));
-			partida.comprobarJugada(new Jugada(1,3));
-			partida.comprobarJugada(new Jugada(1,4));
-			
-			Jugada jug = ((JugadorCPU)jug2).siguienteMovimiento(partida);
-			partida.comprobarJugada(jug);
-			
-			jugador = partida.siguienteTurno();
-			partida.comprobarJugada(new Jugada(2,1));
-			partida.comprobarJugada(new Jugada(2,2));
-			partida.comprobarJugada(new Jugada(2,3));
-			
-			String tab = partida.toString();*/
-			
-			
-			
 		}
 	}
 

@@ -15,7 +15,9 @@ public class EvitarLinea extends Objetivo {
 	@Override
 	public int evaluar(Partida partida, Jugada pos) {
 		// debemos buscar una linea de fichas de longitud numLinea
+		partida.marcarPosicion(pos);
 		partida.comprobarLineaDeFichasContrario(this.numLinea, pos);
+		partida.liberarPosicion(pos);
 		
 		return (partida.getLineaFichas().size()==this.numLinea?this.peso:0);
 	}

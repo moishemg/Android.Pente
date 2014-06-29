@@ -4,5 +4,12 @@
     <string name="app_name">Pente</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="parejas_robadas_">Parejas Robadas:</string>
+    <string name="human_vs_human"> Human VS Human </string>
+    <string name="human_vs_cpu"> Human VS CPU </string>
+    <string name="titulo">Pente</string>
+    <string name="seleccione_estilo_de_juego">Seleccione estilo de juego</string>
+    <string name="datos_del_jugador">Datos del Jugador</string>
+    <string name="iniciar_juego">Iniciar Juego</string>
 
 </resources>

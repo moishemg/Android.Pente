@@ -14,7 +14,7 @@ public class Jugada {
 	}
 	
 	public boolean valida(){
-		return (this.fila>=0 && this.columna>=0);
+		return (this.fila>=0 && this.fila<Partida.MAX_FILAS && this.columna>=0 && this.columna<Partida.MAX_COLUMNAS);
 	}
 	
 	public boolean equals(Object o){

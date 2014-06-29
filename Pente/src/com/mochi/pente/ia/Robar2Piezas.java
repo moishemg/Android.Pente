@@ -11,8 +11,12 @@ public class Robar2Piezas extends Objetivo {
 
 	@Override
 	public int evaluar(Partida partida, Jugada pos) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		partida.marcarPosicion(pos);
+		boolean robar2 = partida.comprobarRobar2(pos);
+		partida.liberarPosicion(pos);
+		
+		return (robar2?this.peso:0);
 	}
 
 }

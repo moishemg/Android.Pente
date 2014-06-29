@@ -17,8 +17,6 @@ public class Partida {
 	
 	private boolean fin;
 	private boolean finGanador;
-	private int robadosJug1;
-	private int robadosJug2;
 	private ArrayList<Jugada> linea;
 	
 	private Jugador jug1;
@@ -32,7 +30,7 @@ public class Partida {
 		this.jug2 = jug2;
 	}
 	
-	public Jugador iniciar(){
+	public FichaPosicion iniciar(){
 		this.tablero = new int[Partida.MAX_FILAS][Partida.MAX_COLUMNAS];
 		for (int iFila=0;iFila<Partida.MAX_FILAS;iFila++) {
 			for (int iCol=0;iCol<Partida.MAX_COLUMNAS;iCol++) {
@@ -40,8 +38,8 @@ public class Partida {
 			}
 		}
 		this.setFinGanador(false);
-		this.robadosJug1 = 0;
-		this.robadosJug2 = 0;
+		this.jug1.setParejasRobadas(0);
+		this.jug2.setParejasRobadas(0);
 		if (((Math.ceil(Math.random() * 100)) % 2)==0) {
 			this.turno = this.jug1;
 		} else {
@@ -49,9 +47,11 @@ public class Partida {
 		}
 		
 		// el primer movimiento es en el centro del tablero
-		this.primerMovimiento();
+		FichaPosicion ficha = this.primerMovimiento();
 		
-		return this.siguienteTurno();
+		this.siguienteTurno();
+		
+		return ficha;
 	}
 	
 	public Jugador siguienteTurno(){
@@ -81,11 +81,13 @@ public class Partida {
 		if (!this.fin) this.comprobarRobar2(jug);
 	}
 	
-	private void primerMovimiento(){
+	private FichaPosicion primerMovimiento(){
 		// el primer movimiento es en el centro del tablero
 		int iFila = (int) Math.ceil(Partida.MAX_FILAS/2);
 		int iCol = (int) Math.ceil(Partida.MAX_COLUMNAS/2);
 		this.establecerJugadorTablero(new Jugada(iFila,iCol));
+		
+		return new FichaPosicion(iFila,iCol,this.getTurno().getFicha());
 	}
 	
 	private void setFinGanador(boolean valor) {
@@ -117,6 +119,10 @@ public class Partida {
 		this.tablero[pos.fila][pos.columna]=this.turno.getFicha();
 	}
 	
+	private void establecerJugadorTablero(FichaPosicion ficha) {
+		this.tablero[ficha.fila][ficha.columna]=ficha.color;
+	}	
+	
 	public void comprobarLineaDeFichasPropia(int numFichasLinea,Jugada jug) {
 		this.comprobarLineaDeFichas(numFichasLinea,jug,false,true);
 	}
@@ -126,62 +132,67 @@ public class Partida {
 	}	
 	
 	private void comprobarLineaDeFichas(int numFichasLinea,Jugada jug,boolean comprobarFinPartida, boolean propia) {
-		int[][] movimientos = {{-1,-1},{-1,0},{-1,1},{0,-1}};
-		int iMovimiento = 0;
-		boolean fin = false;
-		while (!fin && iMovimiento<movimientos.length) {
-			if (propia)
-				fin = (this.comprobarLineaPropia(jug,movimientos[iMovimiento][0],movimientos[iMovimiento][1])==numFichasLinea);
-			else
-				fin = (this.comprobarLineaContrario(jug,movimientos[iMovimiento][0],movimientos[iMovimiento][1])==numFichasLinea);
-			iMovimiento++;
-		}
-		if (comprobarFinPartida) this.setFinGanador(fin);
+		try {
+			int[][] movimientos = {{-1,-1},{-1,0},{-1,1},{0,-1}};
+			int iMovimiento = 0;
+			boolean fin = false;
+			while (!fin && iMovimiento<movimientos.length) {
+				if (propia)
+					fin = (this.comprobarLineaPropia(jug,movimientos[iMovimiento][0],movimientos[iMovimiento][1])==numFichasLinea);
+				else
+					fin = (this.comprobarLineaContrario(jug,movimientos[iMovimiento][0],movimientos[iMovimiento][1])==numFichasLinea);
+				iMovimiento++;
+			}
+			if (comprobarFinPartida) this.setFinGanador(fin);
+		} catch (Exception e) {}
 	}
 	
 	private int comprobarLineaPropia(Jugada jug,int mov_fila,int mov_columna){
-		Jugada jugPos = new Jugada(jug.fila-mov_fila,jug.columna-mov_columna);
-		while (this.posicionDentroTablero(jugPos) && this.posicionFichaJugador(jugPos)) {
-			jugPos.fila-=mov_fila;
-			jugPos.columna-=mov_columna;
-		}
-		jugPos.fila+=mov_fila;
-		jugPos.columna+=mov_columna;
-		
 		int numFichasIguales = 0;
-		this.linea = new ArrayList<Jugada>();
-		while (this.posicionDentroTablero(jugPos) && this.posicionFichaJugador(jugPos)) {
-			this.linea.add(new Jugada(jugPos.fila,jugPos.columna));
-			numFichasIguales++;
+		try {
+			Jugada jugPos = new Jugada(jug.fila-mov_fila,jug.columna-mov_columna);
+			while (this.posicionDentroTablero(jugPos) && this.posicionFichaJugador(jugPos)) {
+				jugPos.fila-=mov_fila;
+				jugPos.columna-=mov_columna;
+			}
 			jugPos.fila+=mov_fila;
 			jugPos.columna+=mov_columna;
-		}
+			
+			this.linea = new ArrayList<Jugada>();
+			while (this.posicionDentroTablero(jugPos) && this.posicionFichaJugador(jugPos)) {
+				this.linea.add(new Jugada(jugPos.fila,jugPos.columna));
+				numFichasIguales++;
+				jugPos.fila+=mov_fila;
+				jugPos.columna+=mov_columna;
+			}
+		} catch (Exception e) {}
 		
 		return numFichasIguales;
 	}
 	
 	private int comprobarLineaContrario(Jugada jug,int mov_fila,int mov_columna){
-		Jugada jugPos = new Jugada(jug.fila-mov_fila,jug.columna-mov_columna);
-		while (this.posicionDentroTablero(jugPos) && this.posicionFichaContrario(jugPos)) {
-			jugPos.fila-=mov_fila;
-			jugPos.columna-=mov_columna;
-		}
-		jugPos.fila+=mov_fila;
-		jugPos.columna+=mov_columna;
-		
 		int numFichasIguales = 0;
-		this.linea = new ArrayList<Jugada>();
-		while (this.posicionDentroTablero(jugPos) && this.posicionFichaContrario(jugPos)) {
-			this.linea.add(new Jugada(jugPos.fila,jugPos.columna));
-			numFichasIguales++;
+		try {
+			Jugada jugPos = new Jugada(jug.fila-mov_fila,jug.columna-mov_columna);
+			while (this.posicionDentroTablero(jugPos) && this.posicionFichaContrario(jugPos)) {
+				jugPos.fila-=mov_fila;
+				jugPos.columna-=mov_columna;
+			}
 			jugPos.fila+=mov_fila;
 			jugPos.columna+=mov_columna;
-		}
-		
+			
+			this.linea = new ArrayList<Jugada>();
+			while (this.posicionDentroTablero(jugPos) && this.posicionFichaContrario(jugPos)) {
+				this.linea.add(new Jugada(jugPos.fila,jugPos.columna));
+				numFichasIguales++;
+				jugPos.fila+=mov_fila;
+				jugPos.columna+=mov_columna;
+			}
+		} catch (Exception e) {}
 		return numFichasIguales;
 	}	
 	
-	private void comprobarRobar2(Jugada jug){
+	public boolean comprobarRobar2(Jugada jug){
 		boolean robar = false;
 		int iMovimiento = 0;
 		while (!robar && iMovimiento<Partida.movimientosVecinos.length) {
@@ -190,6 +201,8 @@ public class Partida {
 		}
 		
 		if (robar) this.sumarParejaRobada();
+		
+		return robar;
 	}
 	
 	private boolean comprobarRobar(Jugada jug,int mov_fila,int mov_columna) {
@@ -216,21 +229,29 @@ public class Partida {
 	
 	private void sumarParejaRobada(){
 		if (this.turno.equals(this.jug1)) {
-			this.robadosJug1++;
-			this.setFinGanador(this.robadosJug1==this.PAREJAS_ROBADAS);
+			this.jug1.setParejasRobadas(this.jug1.getParejasRobadas()+1);
+			this.setFinGanador(this.jug1.getParejasRobadas()==this.PAREJAS_ROBADAS);
 		} else {
-			this.robadosJug2++;
-			this.setFinGanador(this.robadosJug2==this.PAREJAS_ROBADAS);
+			this.jug2.setParejasRobadas(this.jug2.getParejasRobadas()+1);
+			this.setFinGanador(this.jug2.getParejasRobadas()==this.PAREJAS_ROBADAS);
 		}
 	}
 	
 	public int getNumParejasRobadas(Jugador jug){
 		int num = 0;
-		if (this.turno.equals(jug)) num = this.robadosJug1;
-		else num = this.robadosJug2;
+		if (this.turno.equals(jug)) num = this.jug1.getParejasRobadas();
+		else num = this.jug2.getParejasRobadas();
 		return num;
 	}
 
+	public void marcarPosicion(Jugada pos) {
+		this.establecerJugadorTablero(pos);
+	}
+	
+	public void liberarPosicion(Jugada pos) {
+		this.tablero[pos.fila][pos.columna] = Partida.VACIO;
+	}
+	
 	public ArrayList<Jugada> getLineaFichas() {
 		return this.linea;
 	}
@@ -253,6 +274,13 @@ public class Partida {
 		return this.posicionDentroTablero(pos) && this.tablero[pos.fila][pos.columna]==Partida.VACIO;
 	}
 	
+	public void quitarParejaRobada(){
+		ArrayList<Jugada> lst = this.getParejaRobada();
+		for (Jugada jug : lst) {
+			this.liberarPosicion(jug);
+		}
+	}
+	
 	public String toString(){
 		String cadena = "Jugador 1: " + this.jug1.toString()+"\n"+"Jugador 2: "+this.jug2.toString()+"\n";
 		for (int iFila=0;iFila<Partida.MAX_FILAS;iFila++) {
@@ -262,6 +290,7 @@ public class Partida {
 			cadena += "\n";
 			for (int iCol=0;iCol<Partida.MAX_COLUMNAS;iCol++) {
 				cadena += " "+this.tablero[iFila][iCol]+" ";
+				//cadena += " "+iFila+","+iCol+" ";
 			}
 		}
 		cadena += "\n";
@@ -271,5 +300,25 @@ public class Partida {
 		cadena += "\n";
 		
 		return cadena;
+	}
+	
+	public void establecerTablero(ArrayList<FichaPosicion> fichas) {
+		if (fichas!=null) {
+			for (FichaPosicion ficha : fichas) {
+				this.establecerJugadorTablero(ficha);
+			}
+		}
+	}
+	
+	public boolean esTurnoJugador1(){
+		return this.getTurno().equals(this.jug1);
+	}
+	
+	public Jugador getJugador1(){
+		return this.jug1;
+	}
+	
+	public Jugador getJugador2(){
+		return this.jug2;
 	}
 }

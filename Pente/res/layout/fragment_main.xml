@@ -12,15 +12,53 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world"
-        android:id="@+id/txtText"/>
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:text="@string/titulo"
+        android:id="@+id/txtTitulo"/>
+ 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/txtTitulo"
+        android:textStyle="italic"
+        android:text="@string/seleccione_estilo_de_juego"
+        android:id="@+id/txtSeleccione"/>
     
-	<com.mochi.pente.Tablero
-	    android:id="@+id/tablero"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@id/txtText"
-	    custom:filas="19"
-	    custom:columnas="19"/>
-	
+    <Button 
+        android:id="@+id/btnHumanVsHuman1"
+        android:text="@string/human_vs_human"
+        android:padding="5dip"
+        android:layout_margin="5dip"
+        android:layout_below="@id/txtSeleccione"
+        android:layout_centerHorizontal="true"
+        android:tag="humanVsHuman1"
+        android:layout_width="300dip"
+        android:layout_height="wrap_content"/>
+    
+    <Button 
+        android:id="@+id/btnHumanVsHuman2"
+        android:text="@string/human_vs_human"
+        android:padding="5dip"
+        android:layout_margin="5dip"
+        android:layout_below="@id/btnHumanVsHuman1"
+        android:drawableRight="@drawable/ic_network"
+        android:layout_centerHorizontal="true"
+        android:tag="humanVsHuman2"
+        android:layout_width="300dip"
+        android:layout_height="wrap_content"/>    
+
+	<Button 
+        android:id="@+id/btnHumanVsCPU"
+        android:text="@string/human_vs_cpu"
+        android:padding="5dip"
+        android:layout_margin="5dip"
+        android:layout_below="@id/btnHumanVsHuman2"
+        android:layout_centerHorizontal="true"
+        android:tag="humanVsCPU"
+        android:layout_width="300dip"
+        android:layout_height="wrap_content"/>
 </RelativeLayout>
