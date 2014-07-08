@@ -34,10 +34,10 @@ public class Evaluador {
 		this.objetivos.add(new EvitarLinea(this.MAX_PESO - (this.STEP*i),5,false));
 		
 		i++;
-		this.objetivos.add(new ConseguirLinea(this.MAX_PESO - (this.STEP*i),4,false));
+		this.objetivos.add(new EvitarLinea(this.MAX_PESO - (this.STEP*i),4,false));
 		
 		i++;
-		this.objetivos.add(new EvitarLinea(this.MAX_PESO - (this.STEP*i),4,false));
+		this.objetivos.add(new ConseguirLinea(this.MAX_PESO - (this.STEP*i),4,false));
 		
 		i++;
 		//this.objetivos[i] = new ConseguirLinea(this.MAX_PESO - (this.STEP*i),4,true);
@@ -49,10 +49,10 @@ public class Evaluador {
 		this.objetivos.add( new Robar2Piezas(this.MAX_PESO - (this.STEP*i)));
 
 		i++;
-		this.objetivos.add(new ConseguirLinea(this.MAX_PESO - (this.STEP*i),3,false));
+		this.objetivos.add(new EvitarLinea(this.MAX_PESO - (this.STEP*i),3,false));
 		
 		i++;
-		this.objetivos.add(new EvitarLinea(this.MAX_PESO - (this.STEP*i),3,false));
+		this.objetivos.add(new ConseguirLinea(this.MAX_PESO - (this.STEP*i),3,false));
 		
 		i++;
 		//this.objetivos[i] = new ConseguirLinea(this.MAX_PESO - (this.STEP*i),3,true);

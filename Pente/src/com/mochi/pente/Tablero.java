@@ -6,15 +6,19 @@ import com.mochi.pente.entity.FichaPosicion;
 import com.mochi.pente.entity.Jugada;
 import com.mochi.pente.events.OnTableroEventListener;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.Point;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 
 public class Tablero extends View implements OnTableroEventListener {
 	OnTableroEventListener onEventListener;
@@ -46,8 +50,10 @@ public class Tablero extends View implements OnTableroEventListener {
 		this.requestLayout();
 	}
 	
-
+	@SuppressWarnings("deprecation")
+	@SuppressLint("NewApi")
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		/*
 		//int widthMode = MeasureSpec.getMode(widthMeasureSpec);
 	    int widthSize = MeasureSpec.getSize(widthMeasureSpec);
 	    //int heightMode = MeasureSpec.getMode(heightMeasureSpec);
@@ -56,6 +62,27 @@ public class Tablero extends View implements OnTableroEventListener {
 	    int width = (widthSize<heightSize?widthSize:heightSize);
 	    int height = width;
 	    this.setMeasuredDimension(width, height);
+	    */
+	    
+	    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+	    WindowManager wm = (WindowManager) this.getContext().getSystemService(Context.WINDOW_SERVICE);
+	    Display display = wm.getDefaultDisplay();
+	    
+	    int height;
+	    int width;
+	    if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+	    	width = display.getWidth();
+	    	height = display.getHeight();
+	    } else {
+	    	Point sizeDisplay = new Point();
+	    	display.getSize(sizeDisplay);
+	    	width = sizeDisplay.x;
+	    	height = sizeDisplay.y;
+	    }
+	    
+	    int size = (width>height?width:height);
+	    size = (size/4)*3;
+	    setMeasuredDimension(size, size);
 	}
 	
 	protected void onDraw(Canvas canvas) {
@@ -208,6 +235,11 @@ public class Tablero extends View implements OnTableroEventListener {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
+		if (event.getAction()==MotionEvent.ACTION_UP) this.generarJugada(event);
+	    return true;
+	}
+
+	private void generarJugada(MotionEvent event) {
 		// sacamos las coordenadas
 		int posCol = (int)event.getX();
 		int posFila = (int)event.getY();
@@ -228,7 +260,6 @@ public class Tablero extends View implements OnTableroEventListener {
 			FichaPosicion ficha = new FichaPosicion(fila,col,0);
 			if (this.fichas!=null && !this.fichas.contains(ficha) || this.fichas==null) onEventListener.onEvent(ficha);
 		}
-	    return super.onTouchEvent(event);
 	}
 	
 	public void setTableroEventListener(OnTableroEventListener onTableroEventListener) {

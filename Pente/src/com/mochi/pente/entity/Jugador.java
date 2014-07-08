@@ -36,8 +36,12 @@ public class Jugador implements Parcelable {
 		return this.parejasRobadas;
 	}
 	
-	public void setParejasRobadas(int valor) {
-		this.parejasRobadas = valor;
+	public void iniciarParejasRobadas() {
+		this.parejasRobadas = 0;
+	}
+	
+	public void sumarParejaRobada() {
+		this.parejasRobadas++;
 	}
 	
 	public boolean equals(Object o) {
@@ -71,7 +75,7 @@ public class Jugador implements Parcelable {
 		this.id = in.readLong();
 		this.nombre = in.readString();
 		this.ficha = in.readInt();
-		this.setParejasRobadas(in.readInt());
+		this.parejasRobadas = in.readInt();
 	}
 	
 	public static final Jugador.Creator<Jugador> CREATOR = 

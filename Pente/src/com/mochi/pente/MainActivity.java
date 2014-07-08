@@ -103,7 +103,7 @@ public class MainActivity extends ActionBarActivity {
 			OnClickListener handler = new OnClickListener() {
 				@Override
 				public void onClick(View arg) {
-					Intent intent = new Intent(activity,Juego.class);
+					Intent intent = new Intent(activity,JuegoActivity.class);
 					
 					intent.putExtra("jug1", 1);
 					

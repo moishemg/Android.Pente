@@ -12,26 +12,28 @@ public class JugadorCPU extends Jugador {
 
 	public Jugada siguienteMovimiento(Partida partida) {
 		// generamos un movimiento en automático
-		Jugada jugada = this.encontrarPosiblesHuecos(partida);
-		/*int peso = 0;
+		ArrayList<Jugada> lstPosibles = this.encontrarPosiblesHuecos(partida);
+		int peso = 0;
 		Evaluador eval = new Evaluador();
 		Jugada jugada = new Jugada(-1,-1);
-		if (posibles.size()>0) jugada = posibles.get(0);
-		for (Jugada pos : posibles) {
+		if (lstPosibles.size()>0) jugada = lstPosibles.get(0);
+		while (lstPosibles.size()>0) {
+		//for (Jugada pos : lstPosibles) {
+			int index =(int)Math.ceil(Math.random() * lstPosibles.size()-1);
+			Jugada pos = lstPosibles.get(index);
+			lstPosibles.remove(index);
+			
 			int newPeso = eval.evaluar(partida, pos);
 			if (newPeso>peso) {
 				peso = newPeso;
 				jugada = pos;
 			}
-		}*/
+		}
 		
 		return jugada;
 	}
 	
-	private Jugada encontrarPosiblesHuecos(Partida partida){
-		int peso = 0;
-		Evaluador eval = new Evaluador();
-		Jugada jugada = new Jugada(-1,-1);
+	private ArrayList<Jugada> encontrarPosiblesHuecos(Partida partida){
 		ArrayList<Jugada> huecos = new ArrayList<Jugada>();
 		for (int iFila=0;iFila<Partida.MAX_FILAS;iFila++) {
 			for (int iCol=0;iCol<Partida.MAX_COLUMNAS;iCol++) {
@@ -44,18 +46,13 @@ public class JugadorCPU extends Jugador {
 						if (partida.posicionLibreTablero(new Jugada(newPos.fila,newPos.columna)) && !huecos.contains(newPos)) {
 							// lo metemos en huecos para no volver a comprobarlo
 							huecos.add(newPos);
-							int newPeso = eval.evaluar(partida, newPos);
-							if (newPeso>peso) {
-								peso = newPeso;
-								jugada = newPos;
-							}
 						}
 						i++;
 					}
 				} // for
 			} // for
 		}
-		return jugada;
+		return huecos;
 	}
 	
 	

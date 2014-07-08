@@ -38,8 +38,8 @@ public class Partida {
 			}
 		}
 		this.setFinGanador(false);
-		this.jug1.setParejasRobadas(0);
-		this.jug2.setParejasRobadas(0);
+		this.jug1.iniciarParejasRobadas();
+		this.jug2.iniciarParejasRobadas();
 		if (((Math.ceil(Math.random() * 100)) % 2)==0) {
 			this.turno = this.jug1;
 		} else {
@@ -78,7 +78,7 @@ public class Partida {
 		this.comprobarLineaDeFichas(this.FICHAS_IGUALES_LINEA,jug,true,true);
 
 		// sino comprobar si ha robado pareja de fichas
-		if (!this.fin) this.comprobarRobar2(jug);
+		if (!this.fin) this.comprobarRobar2(jug,true);
 	}
 	
 	private FichaPosicion primerMovimiento(){
@@ -193,6 +193,10 @@ public class Partida {
 	}	
 	
 	public boolean comprobarRobar2(Jugada jug){
+		return this.comprobarRobar2(jug, false);
+	}
+	
+	public boolean comprobarRobar2(Jugada jug,boolean sumar){
 		boolean robar = false;
 		int iMovimiento = 0;
 		while (!robar && iMovimiento<Partida.movimientosVecinos.length) {
@@ -200,7 +204,7 @@ public class Partida {
 			iMovimiento++;
 		}
 		
-		if (robar) this.sumarParejaRobada();
+		if (robar && sumar) this.sumarParejaRobada();
 		
 		return robar;
 	}
@@ -229,10 +233,10 @@ public class Partida {
 	
 	private void sumarParejaRobada(){
 		if (this.turno.equals(this.jug1)) {
-			this.jug1.setParejasRobadas(this.jug1.getParejasRobadas()+1);
+			this.jug1.sumarParejaRobada();
 			this.setFinGanador(this.jug1.getParejasRobadas()==this.PAREJAS_ROBADAS);
 		} else {
-			this.jug2.setParejasRobadas(this.jug2.getParejasRobadas()+1);
+			this.jug2.sumarParejaRobada();
 			this.setFinGanador(this.jug2.getParejasRobadas()==this.PAREJAS_ROBADAS);
 		}
 	}
